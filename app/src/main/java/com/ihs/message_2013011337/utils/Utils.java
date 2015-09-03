@@ -183,15 +183,15 @@ public class Utils {
     }
 
     public static String getMessageSendingURL() {
-        return HSConfig.getString("libMessage", "HttpServer") + "/message/send";
+        return HSConfig.getString("libMessage", "HttpServer") + "/com.ihs.message_2013011337/send";
     }
 
     public static String getMessageDeleteAllURL() {
-        return HSConfig.getString("libMessage", "HttpServer") + "/message/delete";
+        return HSConfig.getString("libMessage", "HttpServer") + "/com.ihs.message_2013011337/delete";
     }
 
     public static String getMessageDownloadingURL() {
-        return HSConfig.getString("libMessage", "HttpServer") + "/message/file/get";
+        return HSConfig.getString("libMessage", "HttpServer") + "/com.ihs.message_2013011337/file/get";
     }
 
 }

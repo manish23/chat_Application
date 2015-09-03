@@ -85,7 +85,7 @@ public class MessageManager implements INotificationObserver {
 
             @Override
             public void onKeepCenterReceivedMessage(HSKeepCenterMessage message) {
-                HSLog.e(TAG, "listener received new message." + message.getBody());
+                HSLog.e(TAG, "listener received new com.ihs.message_2013011337." + message.getBody());
                 if (TextUtils.equals(message.getCommand(), HSKeepCenterMessage.COMMNAND_INSTACT) && TextUtils.equals(message.getActType(), "TYPING-START")) {
                     Map<String, String> headers = message.getHeaders();
                     String uidPart = headers.get("uid");
@@ -112,7 +112,7 @@ public class MessageManager implements INotificationObserver {
                         HSBundle bundle = new HSBundle();
                         bundle.putObject(NOTIFICATION_BUNDLE_KEY_ONLINE_MSG, msg);
                         notifyCenter.sendNotification(NOTIFICATION_NAME_ONLINE_MSG_RECEIVED, bundle);
-                        HSLog.d(TAG, "Online message received from: " + components[0]);
+                        HSLog.d(TAG, "Online com.ihs.message_2013011337 received from: " + components[0]);
                     }
 
                 } else if (TextUtils.equals(message.getCommand(), HSKeepCenterMessage.COMMNAND_NOTIFY)) {
@@ -240,7 +240,7 @@ public class MessageManager implements INotificationObserver {
             buf.append(" limit " + count);
         }
         List<HSBaseMessage> list = getDBManager().queryMessages(buf.toString(), args);
-        HSLog.d(TAG, "list message: " + list);
+        HSLog.d(TAG, "list com.ihs.message_2013011337: " + list);
         long timestampCursor = list.size() == 0 ? -1 : list.get(list.size() - 1).getTimestamp().getTime();
         return new QueryResult(list, timestampCursor);
     }
@@ -388,7 +388,7 @@ public class MessageManager implements INotificationObserver {
     }
 
     void pullMessages() {
-        HSLog.d(TAG, "pull message");
+        HSLog.d(TAG, "pull com.ihs.message_2013011337");
 
         HSSynchronizer synchronizer = getSynchronizer();
         if (synchronizer != null) {

@@ -150,13 +150,13 @@ public class MessageDBManager extends SQLiteOpenHelper {
         try {
             HashSet<String> chatterMids = new HashSet<String>();
             for (HSBaseMessage msg : messages) {
-                HSLog.d(TAG, "insert message with content " + msg);
+                HSLog.d(TAG, "insert com.ihs.message_2013011337 with content " + msg);
                 String msgID = msg.getMsgID();
                 boolean isMessageExisted = isMessageExisted(msgID, db);
                 if (!isMessageExisted) {
                     long r = db.insert(getMessageTableName(), null, msg.getDBInfo());
                     insertedMessages.add(msg);
-                    HSLog.d(TAG, "insert message result: " + r);
+                    HSLog.d(TAG, "insert com.ihs.message_2013011337 result: " + r);
                     chatterMids.add(msg.getChatterMid());
                 }
             }
@@ -226,7 +226,7 @@ public class MessageDBManager extends SQLiteOpenHelper {
             ContentValues cv = new ContentValues();
             cv.put(COLUMN_MEDIA_STATUS, mediaStatus);
             int result = db.update(getMessageTableName(), cv, " msg_c_id = ?", new String[] { msgID });
-            HSLog.d(TAG, "update message media status " + (result > 0 ? "succeeded" : "failed"));
+            HSLog.d(TAG, "update com.ihs.message_2013011337 media status " + (result > 0 ? "succeeded" : "failed"));
             msg.setMediaStatusBackend(mediaStatus);
             if (mediaStatus == HSMessageMediaStatus.DOWNLOADED.getValue()) {
                 msg.setDownloadProgress(1);

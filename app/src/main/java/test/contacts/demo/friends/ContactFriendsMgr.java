@@ -164,10 +164,10 @@ public class ContactFriendsMgr implements ISyncResultCallBack {
         });
         msg.what = MSG_SYNC_FRIENDS;
         if (!workingHandler.hasMessages(MSG_SYNC_FRIENDS)) {
-            HSLog.d("friends", "calling module utils to sync with the server, send message MSG_SYNC_FRIENDS");
+            HSLog.d("friends", "calling module utils to sync with the server, send com.ihs.message_2013011337 MSG_SYNC_FRIENDS");
             workingHandler.sendMessage(msg);
         } else {
-            HSLog.d("friends", "already has a message for import");
+            HSLog.d("friends", "already has a com.ihs.message_2013011337 for import");
         }
     }
 

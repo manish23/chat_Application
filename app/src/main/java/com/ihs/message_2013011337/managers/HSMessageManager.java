@@ -61,7 +61,7 @@ public class HSMessageManager {
      * 发送消息
      * 
      * @param message 发送的消息，可调用各个类型消息 HSXXXMessage 的构造方法获得
-     * @param callback 发送消息后的回调接口，请实现其 onMessageSentFinished(message, success, error) 方法来处理消息发送完毕的事件
+     * @param callback 发送消息后的回调接口，请实现其 onMessageSentFinished(com.ihs.message_2013011337, success, error) 方法来处理消息发送完毕的事件
      * @param handler 处理回调所用的 Java 消息队列，传入 new Handler() 得到的 Handler 实例即可
      */
     public void send(HSBaseMessage message, SendMessageCallback callback, Handler handler) {

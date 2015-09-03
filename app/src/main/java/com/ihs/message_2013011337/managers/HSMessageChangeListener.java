@@ -38,7 +38,7 @@ public interface HSMessageChangeListener {
     /**
      * 收到在线消息时被调用
      * 
-     * @param message 收到的在线消息，message.getMid() 返回在线消息的发送者的 mid，content 值由用户定制，可实现自己的通讯协议和交互逻辑
+     * @param message 收到的在线消息，com.ihs.message_2013011337.getMid() 返回在线消息的发送者的 mid，content 值由用户定制，可实现自己的通讯协议和交互逻辑
      */
     void onOnlineMessageReceived(HSOnlineMessage message);
 
@@ -52,7 +52,7 @@ public interface HSMessageChangeListener {
 
     /**
      * 当收到服务器通过长连接发送过来的推送通知时被调用，用途是进行新消息在通知窗口的通知，通知格式如下： alert 项为提示文字，fmid 代表是哪个 mid 发来的消息
-     * {"act":"msg","aps":{"alert":"@: sent to a message","sound":"push_audio_1.wav","badge":1},"fmid":"23"}
+     * {"act":"msg","aps":{"alert":"@: sent to a com.ihs.message_2013011337","sound":"push_audio_1.wav","badge":1},"fmid":"23"}
      * 
      * @param pushInfo 收到通知的信息
      */
