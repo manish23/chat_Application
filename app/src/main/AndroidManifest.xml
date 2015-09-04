@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    
+
     <!-- 百度API所需权限 -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -34,6 +34,8 @@
     <permission
         android:name="com.ihs.app.template.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.ihs.demo.message_2013011337.DemoApplication"
@@ -90,9 +92,16 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.gcm.intent.RETRY" />
 
-                <category android:name="com.ihs.message" />
+                <category android:name="com.ihs.message_2013011337" />
             </intent-filter>
         </receiver>
+
+
+        <activity
+            android:name="com.ihs.demo.message_2013011337.chat_activity"
+            android:label="@string/title_activity_chat_activity"
+            android:theme="@style/Title_bar_Inter">
+        </activity>
     </application>
 
 </manifest>

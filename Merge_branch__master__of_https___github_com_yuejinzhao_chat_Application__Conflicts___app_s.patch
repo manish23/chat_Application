@@ -1,0 +1,108 @@
+Index: app/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/styles.xml	(date 1441371689000)
++++ app/src/main/res/values/styles.xml	(revision )
+@@ -54,4 +54,9 @@
+         <item name="android:layout_margin">10dp</item>
+     </style>
+ 
++    <style name="Title_bar_Inter" parent="android:Theme">
++        <item name="android:windowTitleSize">38dp</item>
++    </style>
++
++
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(date 1441371689000)
++++ app/src/main/res/values/strings.xml	(revision )
+@@ -38,5 +38,6 @@
+     <string name="refreshListView_doing_head_refresh">正在刷新&#8230;</string>
+     <string name="refreshListView_head_load_more">加载更多&#8230;</string>
+     <string name="refreshListView_refresh_lastTime">最近更新&#160;&#058;&#160;</string>
++    <string name="title_activity_chat_activity">chat_activity</string>
+ 
+ </resources>
+\ No newline at end of file
+Index: app/src/main/java/com/ihs/demo/message_2013011337/ContactsFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ihs/demo/message_2013011337/ContactsFragment.java	(date 1441371689000)
++++ app/src/main/java/com/ihs/demo/message_2013011337/ContactsFragment.java	(revision )
+@@ -3,6 +3,7 @@
+ import java.util.ArrayList;
+ import java.util.List;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
+ import android.support.v4.app.Fragment;
+ import android.view.LayoutInflater;
+@@ -38,7 +39,13 @@
+             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 String mid = contacts.get(position).getMid();
+                 String name = contacts.get(position).getName();
+-                Toast.makeText(getActivity(), "你点击了名字为：" + name + " mid为：" + mid + "的联系人，需要在这里跳转到同此人的聊天界面（一个Activity）", Toast.LENGTH_LONG).show();
++                //Toast.makeText(getActivity(), "你点击了名字为：" + name + " mid为：" + mid + "的联系人，需要在这里跳转到同此人的聊天界面（一个Activity）", Toast.LENGTH_LONG).show();
++                Intent intent = new Intent();
++                intent.setClass(getActivity(), chat_activity.class);
++                intent.putExtra("name", name);
++                intent.putExtra("mid", mid);
++                startActivity(intent);
++
+             }
+ 
+         });
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(date 1441371689000)
++++ app/src/main/AndroidManifest.xml	(revision )
+@@ -19,7 +19,7 @@
+     <uses-permission android:name="android.permission.READ_CONTACTS" />
+     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+-    
++
+     <!-- 百度API所需权限 -->
+     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+@@ -35,6 +35,8 @@
+         android:name="com.ihs.app.template.permission.C2D_MESSAGE"
+         android:protectionLevel="signature" />
+ 
++    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
++
+     <application
+         android:name="com.ihs.demo.message_2013011337.DemoApplication"
+         android:allowBackup="true"
+@@ -90,9 +92,16 @@
+                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                 <action android:name="com.google.android.gcm.intent.RETRY" />
+ 
+-                <category android:name="com.ihs.message" />
++                <category android:name="com.ihs.message_2013011337" />
+             </intent-filter>
+         </receiver>
++
++
++        <activity
++            android:name="com.ihs.demo.message_2013011337.chat_activity"
++            android:label="@string/title_activity_chat_activity"
++            android:theme="@style/Title_bar_Inter">
++        </activity>
+     </application>
+ 
+-</manifest>
+\ No newline at end of file
++</manifest>

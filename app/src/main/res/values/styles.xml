@@ -54,4 +54,9 @@
         <item name="android:layout_margin">10dp</item>
     </style>
 
+    <style name="Title_bar_Inter" parent="android:Theme">
+        <item name="android:windowTitleSize">38dp</item>
+    </style>
+
+
 </resources>
