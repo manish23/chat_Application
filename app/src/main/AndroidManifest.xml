@@ -96,11 +96,9 @@
             </intent-filter>
         </receiver>
 
-
         <activity
-            android:name="com.ihs.demo.message_2013011337.chat_activity"
-            android:label="@string/title_activity_chat_activity"
-            android:theme="@style/Title_bar_Inter">
+            android:name="com.ihs.demo.message_2013011337.ChatActivity"
+            android:label="@string/title_activity_chat" >
         </activity>
     </application>
 

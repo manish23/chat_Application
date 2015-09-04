@@ -41,7 +41,7 @@ public class ContactsFragment extends Fragment implements INotificationObserver 
                 String name = contacts.get(position).getName();
                 //Toast.makeText(getActivity(), "你点击了名字为：" + name + " mid为：" + mid + "的联系人，需要在这里跳转到同此人的聊天界面（一个Activity）", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), chat_activity.class);
+                intent.setClass(getActivity(), ChatActivity.class);
                 intent.putExtra("name", name);
                 intent.putExtra("mid", mid);
                 startActivity(intent);

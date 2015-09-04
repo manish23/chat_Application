@@ -19,7 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dip"
             android:background="@drawable/chatting_setmode_voice_btn_normal"/>
-        
+
         <RelativeLayout
             android:id="@+id/text_bottom"
             android:layout_width="fill_parent"
@@ -65,13 +65,12 @@
             android:text="@string/tap_to_send"
             android:visibility="gone" />
     </RelativeLayout>
-   <ListView
-       android:id="@+id/listview"
-       android:layout_above="@+id/bottom"
-       android:layout_below="@+id/interface_titlebar"
-       android:layout_width="fill_parent"
-       android:layout_height="fill_parent">
+    <ListView
+        android:id="@+id/List_view"
+        android:layout_above="@+id/bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-   </ListView>
+    </ListView>
 
 </RelativeLayout>
