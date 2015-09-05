@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -24,7 +23,9 @@ import com.ihs.message_2013011337.types.HSTextMessage;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChatActivity extends HSActionBarActivity implements HSMessageChangeListener{
@@ -35,10 +36,9 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
     private EditText editText;
     private String myword;
     private String get_word;
-    List<HSBaseMessage> chatlist = new ArrayList<HSBaseMessage>();
-    List<String> chatlist_String = new ArrayList<String>();
-    private ArrayAdapter<HSBaseMessage> adapter;
-    private ArrayAdapter<String> String_adapter;
+    List<HSBaseMessage> chatlist = new ArrayList<>();
+    List<ChatEntity> Data_Entity = new ArrayList<>();
+    private MsgAdapter msgAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,8 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
         button_send = (Button) findViewById(R.id.btn_send);
         listView = (ListView) findViewById(R.id.List_view);
         editText = (EditText) findViewById(R.id.editText_sendmessage);
-        String_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, chatlist_String);
-        listView.setAdapter(String_adapter);
+        msgAdapter = new MsgAdapter(this, Data_Entity);
+        listView.setAdapter(msgAdapter);
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,10 +69,16 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                     return;
                 editText.setText("");
                 HSTextMessage textMessage = new HSTextMessage(mid, myword);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(System.currentTimeMillis());
+                String str = formatter.format(date);
+
+                ChatEntity chatEntity = new ChatEntity(myword, str, true);
                 chatlist.add(textMessage);
-                chatlist_String.add(myword);
-                String_adapter.notifyDataSetChanged();
-                listView.setSelection(chatlist_String.size() - 1);
+                Data_Entity.add(chatEntity);
+
+                msgAdapter.notifyDataSetChanged();
+                listView.setSelection(Data_Entity.size() - 1);
                 send();
             }
         });
@@ -118,9 +124,13 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 if(messages.get(i).getType() == HSMessageType.TEXT){
                     HSTextMessage textMessage = (HSTextMessage)messages.get(i);
                     if(textMessage.getFrom().equals(mid)) {
-                        chatlist_String.add(textMessage.getText());
-                        String_adapter.notifyDataSetChanged();
-                        listView.setSelection(chatlist_String.size() - 1);
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date date = new Date(System.currentTimeMillis());
+                        String str = formatter.format(date);
+                        ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str, false);
+                        Data_Entity.add(chatEntity);
+                        msgAdapter.notifyDataSetChanged();
+                        listView.setSelection(Data_Entity.size() - 1);
                     }
                 }
             }
