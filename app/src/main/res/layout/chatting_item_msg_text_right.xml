@@ -23,7 +23,7 @@
             android:id="@+id/send_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:focusable="false"
+            android:focusable="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/user_chat2"/>
@@ -31,11 +31,12 @@
             android:id="@+id/send_text"
             android:layout_toLeftOf="@id/send_image"
             android:layout_marginLeft="10dp"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/chat_message_send_pop_bg"/>
+            android:background="@drawable/chat_message_send_pop_bg"
+            android:text="dasjkhagfadsfadsgfbadsbchjadsbcbadsbchjbdsbfadsgfasgdfkgfadjsgf" />
     </RelativeLayout>
 
 </LinearLayout>

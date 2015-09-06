@@ -2,7 +2,6 @@ package com.ihs.demo.message_2013011337;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.ihs.message_2013011337.managers.HSMessageManager.*;
+
 public class ChatActivity extends HSActionBarActivity implements HSMessageChangeListener{
     private String name;
     private String mid;
@@ -36,6 +37,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
     private EditText editText;
     private String myword;
     private String get_word;
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     List<HSBaseMessage> chatlist = new ArrayList<>();
     List<ChatEntity> Data_Entity = new ArrayList<>();
     private MsgAdapter msgAdapter;
@@ -49,17 +51,38 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
         name = intent.getStringExtra("name");
         mid = intent.getStringExtra("mid");
         setTitle(name);
-        HSMessageManager.getInstance().addListener(this, new Handler());
         init_view();
 
     }
-
+    public void search(){
+        List<HSBaseMessage> res = HSMessageManager.getInstance().queryMessages(mid, 0, -1).getMessages();
+        for(int i = res.size()-1; i >= 0; i--){
+            HSBaseMessage hsBaseMessage = res.get(i);
+            if(hsBaseMessage.getType() == HSMessageType.TEXT){
+                HSTextMessage hsTextMessage = (HSTextMessage)hsBaseMessage;
+                String word = hsTextMessage.getText();
+                Date _date = hsBaseMessage.getTimestamp();
+                String date = formatter.format(_date);
+                ChatEntity chatEntity;
+                if(hsBaseMessage.getFrom().equals(mid)){
+                    chatEntity = new ChatEntity(word, date, false);
+                }else{
+                    chatEntity = new ChatEntity(word, date, true);
+                }
+                Data_Entity.add(chatEntity);
+            }
+        }
+    }
     public void init_view(){
         button_send = (Button) findViewById(R.id.btn_send);
         listView = (ListView) findViewById(R.id.List_view);
         editText = (EditText) findViewById(R.id.editText_sendmessage);
+        search();
         msgAdapter = new MsgAdapter(this, Data_Entity);
         listView.setAdapter(msgAdapter);
+        msgAdapter.notifyDataSetChanged();
+        listView.setSelection(Data_Entity.size() - 1);
+        HSMessageManager.getInstance().addListener(this, new Handler());
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +92,6 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                     return;
                 editText.setText("");
                 HSTextMessage textMessage = new HSTextMessage(mid, myword);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(System.currentTimeMillis());
                 String str = formatter.format(date);
 
@@ -85,7 +107,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
     }
     public void send(){
         HSTextMessage textMessage = new HSTextMessage(mid, myword);
-        HSMessageManager.getInstance().send(textMessage, new HSMessageManager.SendMessageCallback() {
+        getInstance().send(textMessage, new SendMessageCallback() {
             @Override
             public void onMessageSentFinished(HSBaseMessage message, boolean success, HSError error) {
 
@@ -124,7 +146,6 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 if(messages.get(i).getType() == HSMessageType.TEXT){
                     HSTextMessage textMessage = (HSTextMessage)messages.get(i);
                     if(textMessage.getFrom().equals(mid)) {
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Date date = new Date(System.currentTimeMillis());
                         String str = formatter.format(date);
                         ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str, false);
