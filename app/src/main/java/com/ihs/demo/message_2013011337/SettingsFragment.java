@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.ihs.account.api.account.HSAccountManager;
@@ -27,14 +26,14 @@ import com.ihs.message_2013011337.R;
 public class SettingsFragment extends Fragment implements INotificationObserver {
 
     private ListView listView;
-    private ArrayAdapter<String> adapter;
+    private MyArrayAdapter<String> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         listView = (ListView) view.findViewById(R.id.settings_list);
         ArrayList<String> objects = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, objects);
+        adapter = new MyArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, objects);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
 

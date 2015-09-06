@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,8 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         Contact contact = contacts.get(position);
         holder.titleTextView.setText("" + contact.getName() + ": " + contact.getContent());
         holder.detailTextView.setText("mid: " + contact.getMid());
+        holder.titleTextView.setTextColor(Color.parseColor("#000622"));
+        holder.detailTextView.setTextColor(Color.parseColor("#000622"));
         ImageLoader.getInstance().displayImage("content://com.android.contacts/contacts/" + contact.getContactId(), holder.avatarImageView, options);
 
         return convertView;
