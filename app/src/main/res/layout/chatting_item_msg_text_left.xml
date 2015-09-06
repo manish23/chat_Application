@@ -31,9 +31,10 @@
             android:layout_toRightOf="@id/receive_image"
             android:layout_marginLeft="10dp"
             android:textSize="15sp"
+            android:textColor="@color/text"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/chat_message_receive_pop_bg"/>
+            android:background="@drawable/chat_message_receive_pop_bg" />
     </RelativeLayout>
 </LinearLayout>

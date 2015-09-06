@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#ffffff"
-        android:divider="@android:color/black"
+        android:divider="#C5CAE9"
         android:dividerHeight="@dimen/fragment_contacts_contact_list_dividerHeight" />
 
 </LinearLayout>

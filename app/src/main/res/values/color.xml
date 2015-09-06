@@ -16,6 +16,10 @@
     <color name="navigationBar_color">#333333</color>
     <color name="text_gray_color">#858585</color>
     <color name="text_blue_color">#33b5e5</color>
+    <color name="pink">#e91e63</color>
+    <color name="slight_blue">#3f51B5</color>
+    <color name="deep_blue">#303f9f</color>
+    <color name="text">#000622</color>
     <color name="pull_refresh_textview">#000000</color>
     <color name="multi_buttons_bg">#B1B1B1</color>
     <color name="gold">#000000</color>

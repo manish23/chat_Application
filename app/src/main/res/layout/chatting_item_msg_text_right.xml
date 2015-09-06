@@ -33,10 +33,10 @@
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
             android:textSize="15sp"
+            android:textColor="@color/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/chat_message_send_pop_bg"
-            android:text="dasjkhagfadsfadsgfbadsbchjadsbcbadsbchjbdsbfadsgfasgdfkgfadjsgf" />
+            android:background="@drawable/chat_message_send_pop_bg" />
     </RelativeLayout>
 
 </LinearLayout>

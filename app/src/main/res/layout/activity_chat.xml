@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:background="#80deea"
     tools:context="com.ihs.demo.message_2013011337.chat_activity">
-
+    <!--#80deea-->
     <RelativeLayout
         android:id="@+id/bottom"
         android:layout_width="fill_parent"
@@ -49,6 +49,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:singleLine="true"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
         </RelativeLayout>
         <TextView
@@ -62,6 +63,7 @@
             android:layout_toRightOf="@+id/iv_popup"
             android:background="@drawable/chat_send_btn"
             android:gravity="center"
+            android:textColor="@color/black"
             android:text="@string/tap_to_send"
             android:visibility="gone" />
     </RelativeLayout>
