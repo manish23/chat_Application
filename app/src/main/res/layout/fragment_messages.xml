@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <TextView
-        android:id="@+id/chat_list_hint"
-        android:layout_width="wrap_content"
+
+    <ListView
+        android:id="@+id/message_list"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center_vertical"
-        android:text="大家需要在这个 Framgment 里实现会话列表界面的显示，会话列表所需要的数据源需要大家自己根据消息的通知来自己构建"/>
+        android:layout_gravity="start"
+        android:background="#ffffff"
+        android:divider="#C5CAE9"
+        android:dividerHeight="@dimen/fragment_contacts_contact_list_dividerHeight" />
 
 </LinearLayout>
