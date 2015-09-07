@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import test.contacts.demo.friends.api.HSContactFriendsMgr;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.ihs.commons.notificationcenter.INotificationObserver;
 import com.ihs.commons.utils.HSBundle;
 import com.ihs.commons.utils.HSLog;
 import com.ihs.contacts.api.HSPhoneContactMgr;
+import com.ihs.message_2013011337.R;
 import com.ihs.message_2013011337.managers.HSMessageChangeListener;
 import com.ihs.message_2013011337.managers.HSMessageManager;
 import com.ihs.message_2013011337.types.HSBaseMessage;
@@ -39,6 +41,7 @@ public class DemoApplication extends HSApplication implements HSMessageChangeLis
      */
     public static final String URL_SYNC = "http://54.223.212.19:8024/template/contacts/friends/get";
     public static final String URL_ACK = "http://54.223.212.19:8024/template/contacts/friends/get";
+    MediaPlayer player;
 
     private static final String TAG = DemoApplication.class.getName(); // 用于打印 log
 
@@ -89,7 +92,21 @@ public class DemoApplication extends HSApplication implements HSMessageChangeLis
             HSKeepCenter.getInstance().connect();
         }
     }
-
+    private void play_ringtone(){
+        try {
+            player = MediaPlayer.create(this, R.raw.message_ringtone_received);
+            player.start();
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    player.release();
+                    player = null;
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -183,6 +200,15 @@ public class DemoApplication extends HSApplication implements HSMessageChangeLis
     public void onMessageChanged(HSMessageChangeType changeType, List<HSBaseMessage> messages) {
         // 同学们可以根据 changeType 的消息增加、删除、更新信息进行会话数据的构建
         if (changeType == HSMessageChangeType.ADDED && !messages.isEmpty()) {
+            for (HSBaseMessage hsBaseMessage: messages){
+                if(HSAccountManager.getInstance().getMainAccount() == null)
+                    break;
+                if(hsBaseMessage.getTo().equals(HSAccountManager.
+                        getInstance().getMainAccount().getMID())){
+                    play_ringtone();
+                    break;
+                }
+            }
         }
     }
 

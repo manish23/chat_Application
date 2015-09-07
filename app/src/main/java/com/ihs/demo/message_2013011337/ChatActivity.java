@@ -2,6 +2,7 @@ package com.ihs.demo.message_2013011337;
 
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ihs.commons.utils.HSError;
+import com.ihs.commons.utils.HSLog;
 import com.ihs.message_2013011337.R;
 import com.ihs.message_2013011337.managers.HSMessageChangeListener;
 import com.ihs.message_2013011337.managers.HSMessageManager;
@@ -42,6 +44,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
     private ChatEntity _chatEntity;
     private String myword;
     private SoundPool soundPool;
+    public MediaPlayer player;
     private String get_word;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     List<HSBaseMessage> chatlist = new ArrayList<>();
@@ -104,24 +107,34 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                     return;
                 editText.setText("");
                 send();
-                play_ringtone();
             }
         });
     }
 
-    public void play_ringtone(){
-
-        soundPool= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
-        soundPool.load(this, R.raw.message_ringtone_sent, 1);
-        soundPool.play(1, 1, 1, 0, 0, 1);
+    private void play_ringtone(){
+        try {
+            player = MediaPlayer.create(this, R.raw.message_ringtone_sent);
+            player.start();
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    player.release();
+                    player = null;
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
     public void send(){
         final HSTextMessage textMessage = new HSTextMessage(mid, myword);
+        play_ringtone();
         getInstance().send(textMessage, new SendMessageCallback() {
             @Override
             public void onMessageSentFinished(HSBaseMessage message, boolean success, HSError error) {
+//                play_ringtone();
             }
         }, new Handler());
     }
@@ -152,7 +165,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
 
     @Override
     public void onMessageChanged(HSMessageChangeType changeType, List<HSBaseMessage> messages) {
-        if(changeType == HSMessageChangeType.ADDED){
+        if(changeType == HSMessageChangeType.ADDED && !messages.isEmpty()){
             for(int i = 0; i < messages.size(); i++){
                 chatlist.add(messages.get(i));
                 if(messages.get(i).getType() == HSMessageType.TEXT){
@@ -177,7 +190,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 }
             }
         }
-        if(changeType == HSMessageChangeType.UPDATED){
+        if(changeType == HSMessageChangeType.UPDATED && !messages.isEmpty()){
             for(int i = 0; i < messages.size(); i++){
                 chatlist.add(messages.get(i));
                 if(messages.get(i).getType() == HSMessageType.TEXT){
