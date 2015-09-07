@@ -2,6 +2,7 @@ package com.ihs.demo.message_2013011337;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.ihs.commons.notificationcenter.HSGlobalNotificationCenter;
 import com.ihs.commons.notificationcenter.INotificationObserver;
 import com.ihs.commons.utils.HSBundle;
 import com.ihs.message_2013011337.R;
@@ -22,14 +22,15 @@ import com.ihs.message_2013011337.types.HSOnlineMessage;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class MessagesFragment extends Fragment implements INotificationObserver, HSMessageChangeListener{
 
     private ListView listView;
     private MessageAdapter messageAdapter = null;
-    private HSBaseMessage hsBaseMessage;
     private List<HSBaseMessage> list_hsBaseMessage = new ArrayList<>();
     private HSMessageChangeType changeType;
 
@@ -44,7 +45,8 @@ public class MessagesFragment extends Fragment implements INotificationObserver,
         listView = (ListView) view.findViewById(R.id.message_list);
         final List<Contact> contacts = new ArrayList<>();
 
-        messageAdapter = new MessageAdapter(this.getActivity(), R.layout.cell_item_message, contacts, list_hsBaseMessage);
+        HSMessageManager.getInstance().addListener(this, new Handler());
+        messageAdapter = new MessageAdapter(this.getActivity(), R.layout.cell_item_message, contacts);
         listView.setAdapter(messageAdapter);
 
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -61,21 +63,37 @@ public class MessagesFragment extends Fragment implements INotificationObserver,
             }
 
         });
-        HSGlobalNotificationCenter.addObserver("Message_changed", this);
         refresh();
         return view;
     }
     public void refresh(){
 
+
+        List<Contact> list_contact = new ArrayList<>();
         messageAdapter.getContacts().clear();
-        for (Contact contact: FriendManager.getInstance().getAllFriends()){
-            List<HSBaseMessage> res = HSMessageManager.getInstance().queryMessages(contact.getMid(), 1, -1).getMessages();
-            if(!res.isEmpty()){
-                messageAdapter.getHsBaseMessage().add(res.get(0));
-                messageAdapter.getContacts().add(contact);
-                messageAdapter.notifyDataSetChanged();
+        List<Contact> contacts = new ArrayList<>();
+        contacts = FriendManager.getInstance().getAllFriends();
+        try {
+
+            for (Contact contact: contacts){
+                List<HSBaseMessage> res = HSMessageManager.getInstance().queryMessages(contact.getMid(), 1, -1).getMessages();
+                if(!res.isEmpty()){
+                    list_contact.add(contact);
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        Collections.sort(list_contact, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact lhs, Contact rhs) {
+                List<HSBaseMessage> lans = HSMessageManager.getInstance().queryMessages(lhs.getMid(), 1, -1).getMessages();
+                List<HSBaseMessage> rans = HSMessageManager.getInstance().queryMessages(rhs.getMid(), 1, -1).getMessages();
+                return (rans.get(0).getTimestamp().getTime() > lans.get(0).getTimestamp().getTime())? 1: -1;
+            }
+        });
+        messageAdapter.getContacts().addAll(list_contact);
+        messageAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -96,7 +114,7 @@ public class MessagesFragment extends Fragment implements INotificationObserver,
 
     @Override
     public void onMessageChanged(HSMessageChangeType changeType, List<HSBaseMessage> messages) {
-
+        refresh();
     }
 
     @Override

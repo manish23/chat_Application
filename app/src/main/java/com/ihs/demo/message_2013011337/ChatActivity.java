@@ -35,6 +35,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
     private ListView listView;
     private Button button_send;
     private EditText editText;
+    private String status;
     private String myword;
     private String get_word;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -64,10 +65,12 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 Date _date = hsBaseMessage.getTimestamp();
                 String date = formatter.format(_date);
                 ChatEntity chatEntity;
+                status = hsBaseMessage.getStatus().valueOf(hsBaseMessage.getStatus().getValue()).toString();
                 if(hsBaseMessage.getFrom().equals(mid)){
-                    chatEntity = new ChatEntity(word, date, false);
+                    status = "read";
+                    chatEntity = new ChatEntity(word, date+" "+status.toLowerCase(), false);
                 }else{
-                    chatEntity = new ChatEntity(word, date, true);
+                    chatEntity = new ChatEntity(word, date+" "+status.toLowerCase(), true);
                 }
                 Data_Entity.add(chatEntity);
             }
@@ -91,26 +94,25 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 if (myword.length() == 0)
                     return;
                 editText.setText("");
-                HSTextMessage textMessage = new HSTextMessage(mid, myword);
-                Date date = new Date(System.currentTimeMillis());
-                String str = formatter.format(date);
+//                HSTextMessage textMessage = new HSTextMessage(mid, myword);
+//                Date date = new Date(System.currentTimeMillis());
+//                String str = formatter.format(date);
 
-                ChatEntity chatEntity = new ChatEntity(myword, str, true);
-                chatlist.add(textMessage);
-                Data_Entity.add(chatEntity);
-
-                msgAdapter.notifyDataSetChanged();
-                listView.setSelection(Data_Entity.size() - 1);
                 send();
+//                ChatEntity chatEntity = new ChatEntity(myword, str+" "+status, true);
+//                chatlist.add(textMessage);
+//                Data_Entity.add(chatEntity);
+
+//                msgAdapter.notifyDataSetChanged();
+//                listView.setSelection(Data_Entity.size() - 1);
             }
         });
     }
     public void send(){
-        HSTextMessage textMessage = new HSTextMessage(mid, myword);
+        final HSTextMessage textMessage = new HSTextMessage(mid, myword);
         getInstance().send(textMessage, new SendMessageCallback() {
             @Override
             public void onMessageSentFinished(HSBaseMessage message, boolean success, HSError error) {
-
             }
         },new Handler());
     }
@@ -152,6 +154,24 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                         Data_Entity.add(chatEntity);
                         msgAdapter.notifyDataSetChanged();
                         listView.setSelection(Data_Entity.size() - 1);
+                    }
+                }
+            }
+        }
+        if(changeType == HSMessageChangeType.UPDATED){
+            for(int i = 0; i < messages.size(); i++){
+                chatlist.add(messages.get(i));
+                if(messages.get(i).getType() == HSMessageType.TEXT){
+                    HSTextMessage textMessage = (HSTextMessage)messages.get(i);
+                    if(textMessage.getTo().equals(mid)){
+                        Date date = new Date(System.currentTimeMillis());
+                        String str = formatter.format(date);
+                        status = textMessage.getStatus().valueOf(textMessage.getStatus().getValue()).toString();
+                        ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str+" "+status.toLowerCase(), true);
+                        Data_Entity.add(chatEntity);
+                        msgAdapter.notifyDataSetChanged();
+                        listView.setSelection(Data_Entity.size() - 1);
+
                     }
                 }
             }

@@ -183,10 +183,6 @@ public class DemoApplication extends HSApplication implements HSMessageChangeLis
     public void onMessageChanged(HSMessageChangeType changeType, List<HSBaseMessage> messages) {
         // 同学们可以根据 changeType 的消息增加、删除、更新信息进行会话数据的构建
         if (changeType == HSMessageChangeType.ADDED && !messages.isEmpty()) {
-            HSBundle hsBundle = new HSBundle();
-            hsBundle.putObjectList("message", messages);
-            hsBundle.putObject("changeType", changeType);
-            HSGlobalNotificationCenter.sendNotification("Message_changed", hsBundle);
         }
     }
 

@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ihs.message_2013011337.R;
+import com.ihs.message_2013011337.managers.HSMessageManager;
 import com.ihs.message_2013011337.types.HSBaseMessage;
 import com.ihs.message_2013011337.types.HSMessageType;
 import com.ihs.message_2013011337.types.HSTextMessage;
@@ -38,15 +39,12 @@ public class MessageAdapter extends ArrayAdapter<Contact> {
         return contacts;
     }
 
-    public List<HSBaseMessage> getHsBaseMessage(){ return hsBaseMessage;}
 
 
-    public MessageAdapter(Context context, int resource, List<Contact> objects, List<HSBaseMessage> hsBaseMessage) {
+    public MessageAdapter(Context context, int resource, List<Contact> objects) {
         super(context, resource, objects);
         this.contacts = objects;
         this.context = context;
-        this.hsBaseMessage = hsBaseMessage;
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -67,12 +65,16 @@ public class MessageAdapter extends ArrayAdapter<Contact> {
 
         Contact contact = contacts.get(position);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        HSBaseMessage baseMessage = hsBaseMessage.get(position);
+        hsBaseMessage = HSMessageManager.getInstance().queryMessages(contact.getMid(), 0, -1).getMessages();
+        HSBaseMessage baseMessage = hsBaseMessage.get(0);
         String date = formatter.format(baseMessage.getTimestamp());
         holder.nameDate.setText("" + contact.getName() + ": " + date);
         if(baseMessage.getType() == HSMessageType.TEXT){
             HSTextMessage hsTextMessage = (HSTextMessage)baseMessage;
-            holder.detailTextView.setText(hsTextMessage.getText());
+            String text = hsTextMessage.getText().toString();
+            if(text.length() > 23)
+                text = text.substring(0, 22) +"...";
+            holder.detailTextView.setText(text);
             holder.detailTextView.setTextSize(15);
         }
         holder.nameDate.setTextColor(Color.parseColor("#000622"));
