@@ -22,7 +22,6 @@ import com.ihs.message_2013011337.types.HSOnlineMessage;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -67,7 +66,6 @@ public class MessagesFragment extends Fragment implements INotificationObserver,
         return view;
     }
     public void refresh(){
-
 
         List<Contact> list_contact = new ArrayList<>();
         messageAdapter.getContacts().clear();

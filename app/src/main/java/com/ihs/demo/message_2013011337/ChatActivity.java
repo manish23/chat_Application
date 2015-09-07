@@ -1,8 +1,11 @@
 package com.ihs.demo.message_2013011337;
 
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +39,9 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
     private Button button_send;
     private EditText editText;
     private String status;
+    private ChatEntity _chatEntity;
     private String myword;
+    private SoundPool soundPool;
     private String get_word;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     List<HSBaseMessage> chatlist = new ArrayList<>();
@@ -55,6 +60,11 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
         init_view();
 
     }
+    @Override
+    protected void onDestroy(){
+        HSMessageManager.getInstance().markRead(mid);
+        super.onDestroy();
+    }
     public void search(){
         List<HSBaseMessage> res = HSMessageManager.getInstance().queryMessages(mid, 0, -1).getMessages();
         for(int i = res.size()-1; i >= 0; i--){
@@ -67,7 +77,6 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 ChatEntity chatEntity;
                 status = hsBaseMessage.getStatus().valueOf(hsBaseMessage.getStatus().getValue()).toString();
                 if(hsBaseMessage.getFrom().equals(mid)){
-                    status = "read";
                     chatEntity = new ChatEntity(word, date+" "+status.toLowerCase(), false);
                 }else{
                     chatEntity = new ChatEntity(word, date+" "+status.toLowerCase(), true);
@@ -94,28 +103,29 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 if (myword.length() == 0)
                     return;
                 editText.setText("");
-//                HSTextMessage textMessage = new HSTextMessage(mid, myword);
-//                Date date = new Date(System.currentTimeMillis());
-//                String str = formatter.format(date);
-
                 send();
-//                ChatEntity chatEntity = new ChatEntity(myword, str+" "+status, true);
-//                chatlist.add(textMessage);
-//                Data_Entity.add(chatEntity);
-
-//                msgAdapter.notifyDataSetChanged();
-//                listView.setSelection(Data_Entity.size() - 1);
+                play_ringtone();
             }
         });
     }
+
+    public void play_ringtone(){
+
+        soundPool= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+        soundPool.load(this, R.raw.message_ringtone_sent, 1);
+        soundPool.play(1, 1, 1, 0, 0, 1);
+    }
+
+
     public void send(){
         final HSTextMessage textMessage = new HSTextMessage(mid, myword);
         getInstance().send(textMessage, new SendMessageCallback() {
             @Override
             public void onMessageSentFinished(HSBaseMessage message, boolean success, HSError error) {
             }
-        },new Handler());
+        }, new Handler());
     }
+
 
 
     @Override
@@ -150,7 +160,16 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                     if(textMessage.getFrom().equals(mid)) {
                         Date date = new Date(System.currentTimeMillis());
                         String str = formatter.format(date);
-                        ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str, false);
+                        _chatEntity = new ChatEntity(textMessage.getText(), str, false);
+                        Data_Entity.add(_chatEntity);
+                        msgAdapter.notifyDataSetChanged();
+                        listView.setSelection(Data_Entity.size() - 1);
+                    }
+                    else if(textMessage.getTo().equals(mid)){
+                        Date date = new Date(System.currentTimeMillis());
+                        String str = formatter.format(date);
+                        status = textMessage.getStatus().valueOf(textMessage.getStatus().getValue()).toString();
+                        ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str + " " +status.toLowerCase(), true);
                         Data_Entity.add(chatEntity);
                         msgAdapter.notifyDataSetChanged();
                         listView.setSelection(Data_Entity.size() - 1);
@@ -167,8 +186,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                         Date date = new Date(System.currentTimeMillis());
                         String str = formatter.format(date);
                         status = textMessage.getStatus().valueOf(textMessage.getStatus().getValue()).toString();
-                        ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str+" "+status.toLowerCase(), true);
-                        Data_Entity.add(chatEntity);
+                        Data_Entity.get(Data_Entity.size()-1).setText(str + " " + status.toLowerCase());
                         msgAdapter.notifyDataSetChanged();
                         listView.setSelection(Data_Entity.size() - 1);
 

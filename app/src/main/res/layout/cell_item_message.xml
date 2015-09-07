@@ -4,10 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/unread"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/pink"
+        android:textSize="15sp"
+        android:textAlignment="gravity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/contact_avatar"
+        android:layout_toRightOf="@+id/unread"
         android:orientation="vertical" >
 
         <TextView
@@ -17,7 +25,6 @@
             android:layout_weight="1"
             android:paddingLeft="@dimen/cell_item_title_text_view_paddingLeft"
             android:paddingRight="@dimen/cell_item_title_text_view_paddingRight"
-            android:text="title"
             android:textAlignment="gravity"
             android:textSize="@dimen/cell_item_title_text_view_textSize" />
 
@@ -28,7 +35,6 @@
             android:layout_weight="1"
             android:paddingLeft="@dimen/cell_item_detail_text_view_paddingLeft"
             android:paddingRight="@dimen/cell_item_detail_text_view_paddingRight"
-            android:text="title"
             android:textAlignment="gravity"
             android:textSize="@dimen/cell_item_detail_text_view_textSize" />
     </LinearLayout>

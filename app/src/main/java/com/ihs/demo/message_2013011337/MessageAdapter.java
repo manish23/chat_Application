@@ -30,6 +30,7 @@ public class MessageAdapter extends ArrayAdapter<Contact> {
 
 
     private class ViewHolder {
+        TextView unread;
         TextView nameDate;
         TextView detailTextView;
     }
@@ -56,6 +57,7 @@ public class MessageAdapter extends ArrayAdapter<Contact> {
             convertView = inflater.inflate(R.layout.cell_item_message, parent, false);
             TextView titleView = (TextView) convertView.findViewById(R.id.name_Date_view);
             TextView detailView = (TextView) convertView.findViewById(R.id.detail_text);
+            holder.unread = (TextView) convertView.findViewById(R.id.unread);
             holder.nameDate = titleView;
             holder.detailTextView = detailView;
             convertView.setTag(holder);
@@ -64,8 +66,15 @@ public class MessageAdapter extends ArrayAdapter<Contact> {
         }
 
         Contact contact = contacts.get(position);
+        int unread_num = 0;
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         hsBaseMessage = HSMessageManager.getInstance().queryMessages(contact.getMid(), 0, -1).getMessages();
+        for(int i = hsBaseMessage.size()-1; i >= 0; i--){
+            HSBaseMessage hsBaseMessage1 = hsBaseMessage.get(i);
+            if(hsBaseMessage1.getStatus().getValue() == 3)
+                unread_num ++;
+        }
         HSBaseMessage baseMessage = hsBaseMessage.get(0);
         String date = formatter.format(baseMessage.getTimestamp());
         holder.nameDate.setText("" + contact.getName() + ": " + date);
@@ -75,10 +84,12 @@ public class MessageAdapter extends ArrayAdapter<Contact> {
             if(text.length() > 23)
                 text = text.substring(0, 22) +"...";
             holder.detailTextView.setText(text);
+            holder.unread.setText(""+unread_num);
             holder.detailTextView.setTextSize(15);
         }
         holder.nameDate.setTextColor(Color.parseColor("#000622"));
         holder.detailTextView.setTextColor(Color.parseColor("#000622"));
+        holder.unread.setTextColor(Color.parseColor("#e91e63"));
 
         return convertView;
     }

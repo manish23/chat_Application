@@ -1,5 +1,6 @@
 package com.ihs.demo.message_2013011337;
 
+
 /**
  * Created by wuchen on 15-9-5.
  */
@@ -11,7 +12,11 @@ public class ChatEntity {
         return text;
     }
     public String getDate(){
+
         return date;
+    }
+    public void setText(String date){
+        this.date = date;
     }
     public boolean get_Issend(){
         return issend;
