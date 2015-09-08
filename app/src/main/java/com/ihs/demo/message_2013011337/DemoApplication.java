@@ -5,9 +5,16 @@ import java.util.List;
 import org.json.JSONObject;
 
 import test.contacts.demo.friends.api.HSContactFriendsMgr;
+
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -33,7 +40,6 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-
 public class DemoApplication extends HSApplication implements HSMessageChangeListener, INotificationObserver {
 
     /*
@@ -42,6 +48,9 @@ public class DemoApplication extends HSApplication implements HSMessageChangeLis
     public static final String URL_SYNC = "http://54.223.212.19:8024/template/contacts/friends/get";
     public static final String URL_ACK = "http://54.223.212.19:8024/template/contacts/friends/get";
     MediaPlayer player;
+    private NotificationManager notificationManager;
+    String mid;
+    String name;
 
     private static final String TAG = DemoApplication.class.getName(); // 用于打印 log
 
@@ -182,11 +191,44 @@ public class DemoApplication extends HSApplication implements HSMessageChangeLis
      * 
      * @param pushInfo 收到通知的信息
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onReceivingRemoteNotification(JSONObject userInfo) {
         HSLog.d(TAG, "receive remote notification: " + userInfo);
         if (HSSessionMgr.getTopActivity() == null) {
-            // 大家在这里做通知中心的通知即可
+            try{
+                mid = userInfo.get("fmid").toString();
+            }catch (org.json.JSONException e){
+                e.printStackTrace();
+             }
+            Contact contact = FriendManager.getInstance().getFriend(mid);
+            name = contact.getName();
+            HSLog.e(TAG, "Contact " + name);
+//            String service = NOTIFICATION_SERVICE;
+            notificationManager = (NotificationManager)this.getSystemService(NOTIFICATION_SERVICE);
+//            notification = new Notification();
+//            String text = "Messages from: " + mid;
+//            long when = System.currentTimeMillis();
+//            notification.icon = R.drawable.ic_launcher;
+//            notification.tickerText = text;
+//            notification.when = when;
+//            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+//            notification.defaults = Notification.DEFAULT_SOUND;
+            Notification.Builder mBuilder =
+                    new Notification.Builder(this)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle("New Messages")
+                            .setContentText("From:" + name)
+                            .setAutoCancel(true)
+                            .setDefaults(Notification.DEFAULT_ALL);
+            Intent intent;
+            intent = new Intent(this, ChatActivity.class);
+            intent.putExtra("name", name);
+            intent.putExtra("mid", mid);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, Integer.valueOf(mid).intValue(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(pendingIntent);
+            notificationManager.notify(Integer.valueOf(mid), mBuilder.build());
+
         }
     }
 

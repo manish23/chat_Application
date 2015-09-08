@@ -36,6 +36,9 @@
         android:protectionLevel="signature" />
 
     <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-sdk android:minSdkVersion="15"></uses-sdk>
+    <uses-permission android:name="android.permission.FLASHLIGHT"></uses-permission>
+    <uses-permission android:name="ANDROID.PERMISSION.VIBRATE"></uses-permission>
 
     <application
         android:name="com.ihs.demo.message_2013011337.DemoApplication"

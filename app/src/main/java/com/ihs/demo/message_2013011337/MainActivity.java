@@ -1,6 +1,7 @@
 package com.ihs.demo.message_2013011337;
 
 import test.contacts.demo.friends.api.HSContactFriendsMgr;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,14 +20,23 @@ public class MainActivity extends HSActionBarActivity {
 
     private final static String TAG = MainActivity.class.getName();
     private Tab tabs[];
+    private static final int ID = 1;
+    private static MainActivity mainActivity = null;
+
+    public static MainActivity getInstance(){
+        if(mainActivity == null)
+            mainActivity = new MainActivity();
+        return mainActivity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mainActivity = this;
         ActionBar bar = this.getSupportActionBar();
         bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         int[] tabNames = { R.string.contacts, R.string.messages, R.string.settings, R.string.sample };
+
         tabs = new Tab[4];
         for (int i = 0; i < 4; i++) {
             Tab tab = bar.newTab();
