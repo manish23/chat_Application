@@ -1,24 +1,16 @@
 package com.ihs.demo.message_2013011337;
 
-import android.R.integer;
 import android.content.Context;
-import android.database.DataSetObserver;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ihs.message_2013011337.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MsgAdapter extends BaseAdapter {
@@ -103,7 +95,7 @@ public class MsgAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.tvSendTime.setText(entity.getDate());
+        viewHolder.tvSendTime.setText(entity.getDate()+" " + entity.getStatus());
         viewHolder.tvContent.setText(entity.getText());
 
         return convertView;

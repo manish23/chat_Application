@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ihs.commons.utils.HSError;
-import com.ihs.commons.utils.HSLog;
 import com.ihs.message_2013011337.R;
 import com.ihs.message_2013011337.managers.HSMessageChangeListener;
 import com.ihs.message_2013011337.managers.HSMessageManager;
@@ -43,9 +41,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
     private String status;
     private ChatEntity _chatEntity;
     private String myword;
-    private SoundPool soundPool;
     public MediaPlayer player;
-    private String get_word;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     List<HSBaseMessage> chatlist = new ArrayList<>();
     List<ChatEntity> Data_Entity = new ArrayList<>();
@@ -80,10 +76,14 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                 ChatEntity chatEntity;
                 status = hsBaseMessage.getStatus().valueOf(hsBaseMessage.getStatus().getValue()).toString();
                 if(hsBaseMessage.getFrom().equals(mid)){
-                    chatEntity = new ChatEntity(word, date+" "+status.toLowerCase(), false);
+                    chatEntity = new ChatEntity(word, date, "read", false);
                 }else{
-                    chatEntity = new ChatEntity(word, date+" "+status.toLowerCase(), true);
+                    chatEntity = new ChatEntity(word, date, status.toLowerCase(), true);
                 }
+                Data_Entity.add(chatEntity);
+            }else{
+                String date = formatter.format(hsBaseMessage.getTimestamp());
+                ChatEntity chatEntity = new ChatEntity(hsBaseMessage.toString(), date, "read", true);
                 Data_Entity.add(chatEntity);
             }
         }
@@ -173,7 +173,7 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                     if(textMessage.getFrom().equals(mid)) {
                         Date date = new Date(System.currentTimeMillis());
                         String str = formatter.format(date);
-                        _chatEntity = new ChatEntity(textMessage.getText(), str, false);
+                        _chatEntity = new ChatEntity(textMessage.getText(), str, "read", false);
                         Data_Entity.add(_chatEntity);
                         msgAdapter.notifyDataSetChanged();
                         listView.setSelection(Data_Entity.size() - 1);
@@ -182,11 +182,19 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                         Date date = new Date(System.currentTimeMillis());
                         String str = formatter.format(date);
                         status = textMessage.getStatus().valueOf(textMessage.getStatus().getValue()).toString();
-                        ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str + " " +status.toLowerCase(), true);
+                        ChatEntity chatEntity = new ChatEntity(textMessage.getText(), str, status.toLowerCase(), true);
                         Data_Entity.add(chatEntity);
                         msgAdapter.notifyDataSetChanged();
                         listView.setSelection(Data_Entity.size() - 1);
                     }
+                }else{
+                    Date date = new Date(System.currentTimeMillis());
+                    String str = formatter.format(date);
+                    _chatEntity = new ChatEntity(messages.get(i).toString(), str, "read", false);
+                    Data_Entity.add(_chatEntity);
+                    msgAdapter.notifyDataSetChanged();
+                    listView.setSelection(Data_Entity.size() - 1);
+
                 }
             }
         }
@@ -199,7 +207,10 @@ public class ChatActivity extends HSActionBarActivity implements HSMessageChange
                         Date date = new Date(System.currentTimeMillis());
                         String str = formatter.format(date);
                         status = textMessage.getStatus().valueOf(textMessage.getStatus().getValue()).toString();
-                        Data_Entity.get(Data_Entity.size()-1).setText(str + " " + status.toLowerCase());
+                        for(int j = Data_Entity.size()-1; j >= 0; j--){
+                            if(Data_Entity.get(j).getText().equals(textMessage.getText()))
+                                Data_Entity.get(j).setText(str, status.toLowerCase());
+                        }
                         msgAdapter.notifyDataSetChanged();
                         listView.setSelection(Data_Entity.size() - 1);
 

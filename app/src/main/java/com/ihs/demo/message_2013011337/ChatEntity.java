@@ -6,22 +6,26 @@ package com.ihs.demo.message_2013011337;
  */
 public class ChatEntity {
     private String text;
+    private String status;
     private String date;
     private boolean issend = true;
     public String getText(){
         return text;
     }
     public String getDate(){
-
         return date;
     }
-    public void setText(String date){
-        this.date = date;
+    public String getStatus(){
+        return  status;
+    }
+    public void setText(String date, String status){
+        this.date = date;   this.status = status;
     }
     public boolean get_Issend(){
         return issend;
     }
-    public ChatEntity(String text, String date, boolean issend){
+    public ChatEntity(String text, String date, String status, boolean issend){
         this.date = date;   this.text = text;   this.issend = issend;
+        this.status = status;
     }
 }

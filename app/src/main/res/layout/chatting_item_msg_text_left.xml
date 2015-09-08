@@ -18,19 +18,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" >
-        <ImageView
-            android:id="@+id/receive_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/user_chat1"/>
         <TextView
             android:id="@+id/receive_text"
-            android:layout_toRightOf="@id/receive_image"
-            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="10dp"
+            android:focusable="true"
             android:textSize="15sp"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
             android:textColor="@color/text"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
